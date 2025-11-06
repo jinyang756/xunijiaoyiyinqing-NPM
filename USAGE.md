@@ -1,7 +1,7 @@
-# 📚 @jcf/sim-engine 使用指南
+# 📚 jcf-sim-engine 使用指南
 
 恭喜你已经发布了 NPM 包！  
-下面是**在你的 React 前端项目中集成和使用 `@jcf/sim-engine` 的标准流程**，并给出常见用法和最佳实践。
+下面是**在你的 React 前端项目中集成和使用 `jcf-sim-engine` 的标准流程**，并给出常见用法和最佳实践。
 
 ---
 
@@ -10,11 +10,11 @@
 在你的 React 项目根目录下执行：
 
 ```bash
-npm install @jcf/sim-engine
+npm install jcf-sim-engine
 # 或者
-yarn add @jcf/sim-engine
+yarn add jcf-sim-engine
 # 或者
-pnpm add @jcf/sim-engine
+pnpm add jcf-sim-engine
 ```
 
 ---
@@ -25,7 +25,7 @@ pnpm add @jcf/sim-engine
 
 ```tsx
 import { useEffect } from 'react'
-import { initSimulation } from '@jcf/sim-engine'
+import { initSimulation } from 'jcf-sim-engine'
 
 function App() {
   useEffect(() => {
@@ -57,7 +57,7 @@ export default App
 如果你采用了包内的 UI 组件（推荐），直接引入即可：
 
 ```tsx
-import { SimulationDashboard, SimulationControlPanel } from '@jcf/sim-engine/components'
+import { SimulationDashboard, SimulationControlPanel } from 'jcf-sim-engine/components'
 
 function App() {
   // ...如上初始化
@@ -79,7 +79,7 @@ function App() {
 你可以在任意组件中通过 `zustand` hooks 获取实时数据：
 
 ```tsx
-import { useSimulationStore, useAccountStore } from '@jcf/sim-engine'
+import { useSimulationStore, useAccountStore } from 'jcf-sim-engine'
 
 function MyCustomPanel() {
   const contracts = useSimulationStore(state => state.contracts)
@@ -123,7 +123,7 @@ function OpenContractButton() {
 内置导出方法，直接调用即可：
 
 ```tsx
-import { exportFundContracts, exportTrades } from '@jcf/sim-engine'
+import { exportFundContracts, exportTrades } from 'jcf-sim-engine'
 
 function ExportButtons() {
   return (
@@ -198,7 +198,7 @@ initSimulation({
 ## 11️⃣ 参考Demo
 
 ```tsx
-import { initSimulation, SimulationDashboard, SimulationControlPanel } from '@jcf/sim-engine'
+import { initSimulation, SimulationDashboard, SimulationControlPanel } from 'jcf-sim-engine'
 
 initSimulation({
   speed: 60,

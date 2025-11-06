@@ -5,8 +5,8 @@ import mitt from 'mitt'
 export const eventBus = mitt()
 
 // 导出mitt的类型
-export type EventType = typeof mitt extends () => { emit: infer E } ? E extends (event: infer T, payload?: infer P) => void ? T : never : never
-export type EventHandler<T = any> = (payload?: T) => void
+export type EventType = string | symbol
+export type EventHandler<T = unknown> = (payload?: T) => void
 
 // 默认导出事件总线
 export default eventBus

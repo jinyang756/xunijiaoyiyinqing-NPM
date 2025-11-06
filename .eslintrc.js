@@ -19,7 +19,9 @@ module.exports = {
     // 基本规则
     'no-console': 'warn',
     'no-debugger': 'error',
-    'no-unused-vars': 'warn'
+    'no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn'
   },
   ignorePatterns: ['dist/', 'node_modules/']
 };

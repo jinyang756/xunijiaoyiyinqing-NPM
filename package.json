@@ -1,6 +1,6 @@
 {
   "name": "jcf-sim-engine",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "聚财众发虚拟交易引擎 - 高仿真全业务交易模拟平台",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

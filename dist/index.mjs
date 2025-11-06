@@ -1,13 +1,21 @@
 import {
-  __esm,
-  __export,
-  __toCommonJS,
   getSupabaseClient,
   initSupabase,
   init_supabase,
   supabase,
   supabase_exports
-} from "./chunk-OG7LT6QE.mjs";
+} from "./chunk-5SSXKBBW.mjs";
+import {
+  init_validation,
+  isValidUserId,
+  validateAccountUpdates,
+  validateAndSanitizeTrade
+} from "./chunk-GRQ2YORU.mjs";
+import {
+  __esm,
+  __export,
+  __toCommonJS
+} from "./chunk-3ROPP2TA.mjs";
 
 // src/store/accountStore.ts
 var accountStore_exports = {};
@@ -23,6 +31,7 @@ var useAccountStore, useActiveAccount, useAccounts, useUserBalance;
 var init_accountStore = __esm({
   "src/store/accountStore.ts"() {
     "use strict";
+    init_validation();
     useAccountStore = create2()(
       immer((set, get) => ({
         accounts: [],
@@ -48,18 +57,36 @@ var init_accountStore = __esm({
           return get().accounts.find((account) => account.user_id === user_id);
         },
         updateAccount: (user_id, updates) => {
+          if (!isValidUserId(user_id)) {
+            console.warn("Invalid user ID:", user_id);
+            return;
+          }
+          const validatedUpdates = validateAccountUpdates(updates);
+          if (!validatedUpdates) {
+            console.warn("Invalid account updates:", updates);
+            return;
+          }
           set((state) => {
             const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
             if (accountIndex !== -1) {
-              Object.assign(state.accounts[accountIndex], updates);
+              Object.assign(state.accounts[accountIndex], validatedUpdates);
             }
           });
         },
         addTrade: (user_id, trade) => {
+          if (!isValidUserId(user_id)) {
+            console.warn("Invalid user ID:", user_id);
+            return;
+          }
+          const sanitizedTrade = validateAndSanitizeTrade(trade);
+          if (!sanitizedTrade) {
+            console.warn("Invalid trade data:", trade);
+            return;
+          }
           set((state) => {
             const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
             if (accountIndex !== -1) {
-              state.accounts[accountIndex].trades.push(trade);
+              state.accounts[accountIndex].trades.push(sanitizedTrade);
             }
           });
         },
@@ -655,7 +682,7 @@ var FundContractEngine = class {
     notify("\u5408\u7EA6\u7ED3\u7B97", `${contract.type === "shanghai" ? "\u4E0A\u8BC1" : "\u6052\u751F"}\u5408\u7EA6 ${result === "win" ? "\u76C8\u5229" : "\u4E8F\u635F"} \xA5${Math.abs(contract.profit)}`);
   }
   async persistContract(contract) {
-    const { getSupabaseClient: getSupabaseClient2 } = await import("./supabase-IMBQQ4LJ.mjs");
+    const { getSupabaseClient: getSupabaseClient2 } = await import("./supabase-HE5JCRMF.mjs");
     const client = getSupabaseClient2();
     if (!client) {
       console.warn("Supabase client not available");
@@ -680,11 +707,21 @@ var FundContractEngine = class {
     }
   }
   setContractResult(contract_id, result) {
-    const contract = this.contracts.find((c) => c.contract_id === contract_id);
-    if (contract && contract.status === "open") {
-      contract.manual_result = result;
-      this.expireContract(contract);
-    }
+    import("./validation-OOUD2KX5.mjs").then(({ isValidContractId, isValidContractResult }) => {
+      if (!isValidContractId(contract_id)) {
+        console.warn("Invalid contract ID:", contract_id);
+        return;
+      }
+      if (!isValidContractResult(result)) {
+        console.warn("Invalid contract result:", result);
+        return;
+      }
+      const contract = this.contracts.find((c) => c.contract_id === contract_id);
+      if (contract && contract.status === "open") {
+        contract.manual_result = result;
+        this.expireContract(contract);
+      }
+    });
   }
 };
 

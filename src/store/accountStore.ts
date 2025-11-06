@@ -1,5 +1,12 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
+import { 
+  isValidUserId, 
+  validateAndSanitizeTrade, 
+  validateAccountUpdates,
+  isValidUsername,
+  isValidAmount
+} from '../utils/validation'
 
 interface DemoAccount {
   user_id: string
@@ -52,19 +59,43 @@ export const useAccountStore = create<DemoAccountState>()(
   },
 
   updateAccount: (user_id: string, updates: Partial<DemoAccount>) => {
+    // 输入验证
+    if (!isValidUserId(user_id)) {
+      console.warn('Invalid user ID:', user_id);
+      return;
+    }
+    
+    const validatedUpdates = validateAccountUpdates(updates);
+    if (!validatedUpdates) {
+      console.warn('Invalid account updates:', updates);
+      return;
+    }
+    
     set((state) => {
       const accountIndex = state.accounts.findIndex(account => account.user_id === user_id)
       if (accountIndex !== -1) {
-        Object.assign(state.accounts[accountIndex], updates)
+        Object.assign(state.accounts[accountIndex], validatedUpdates)
       }
     })
   },
 
   addTrade: (user_id: string, trade: Record<string, unknown>) => {
+    // 输入验证
+    if (!isValidUserId(user_id)) {
+      console.warn('Invalid user ID:', user_id);
+      return;
+    }
+    
+    const sanitizedTrade = validateAndSanitizeTrade(trade);
+    if (!sanitizedTrade) {
+      console.warn('Invalid trade data:', trade);
+      return;
+    }
+    
     set((state) => {
       const accountIndex = state.accounts.findIndex(account => account.user_id === user_id)
       if (accountIndex !== -1) {
-        state.accounts[accountIndex].trades.push(trade)
+        state.accounts[accountIndex].trades.push(sanitizedTrade)
       }
     })
   },

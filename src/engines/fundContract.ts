@@ -220,10 +220,24 @@ export class FundContractEngine {
   }
 
   setContractResult(contract_id: string, result: 'win' | 'loss') {
-    const contract = this.contracts.find(c => c.contract_id === contract_id);
-    if (contract && contract.status === 'open') {
-      contract.manual_result = result;
-      this.expireContract(contract);
-    }
+    // 动态导入验证工具
+    import('../utils/validation').then(({ isValidContractId, isValidContractResult }) => {
+      // 输入验证
+      if (!isValidContractId(contract_id)) {
+        console.warn('Invalid contract ID:', contract_id);
+        return;
+      }
+      
+      if (!isValidContractResult(result)) {
+        console.warn('Invalid contract result:', result);
+        return;
+      }
+      
+      const contract = this.contracts.find(c => c.contract_id === contract_id);
+      if (contract && contract.status === 'open') {
+        contract.manual_result = result;
+        this.expireContract(contract);
+      }
+    });
   }
 }

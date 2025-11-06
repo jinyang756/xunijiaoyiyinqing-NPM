@@ -12,6 +12,7 @@
 - **💾 数据持久化**: Supabase集成 + CSV导出
 - **🔔 实时通知**: WebSocket推送 + 浏览器通知
 - **⚡ 性能优化**: WebWorker + 智能调度
+- **🛡️ 数据脱敏**: 内置隐私保护功能，可脱敏用户信息、账户余额、交易记录等敏感数据
 
 ## 📦 安装
 
@@ -158,12 +159,27 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 - **参数可视化**: 滑块、开关、数值输入
 - **状态显示**: 实时更新各模块状态
 
-## 🧪 测试
+## 🛡️ 数据脱敏
 
-运行测试套件：
+内置的数据脱敏功能可以保护用户隐私和敏感信息：
 
-```bash
-npm test
+```typescript
+import { 
+  maskUserId, 
+  maskUsername, 
+  maskBalance, 
+  maskAmount, 
+  maskContractId,
+  enableDataMasking
+} from 'jcf-sim-engine'
+
+// 启用数据脱敏
+enableDataMasking(true)
+
+// 脱敏用户信息
+const maskedUserId = maskUserId('user_123456')     // us****56
+const maskedUsername = maskUsername('张三丰')       // 张**丰
+const maskedBalance = maskBalance(123456.78)       // 12****.**
 ```
 
 ## 📄 许可证

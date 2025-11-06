@@ -41,8 +41,8 @@ var init_supabase = __esm({
   "src/services/supabase.ts"() {
     "use strict";
     import_supabase_js = require("@supabase/supabase-js");
-    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL;
-    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY;
+    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL || "";
+    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY || "";
     if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_URL) {
       console.warn("\u26A0\uFE0F  Supabase URL \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_URL \u73AF\u5883\u53D8\u91CF");
     }

@@ -13,6 +13,7 @@ interface SimulationFundContract {
   status: 'open' | 'won' | 'lost'
   cost: number
   profit?: number
+  [key: string]: any
 }
 
 // 上证指数接口

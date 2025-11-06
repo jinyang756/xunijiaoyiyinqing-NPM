@@ -120,8 +120,8 @@ declare class FundEngine {
     constructor();
     onSchedulerStart: () => void;
     onTick: (now: Date) => void;
-    subscribeFund(userId: string, fundCode: string, amount: number): string;
-    redeemFund(userId: string, fundCode: string, shares: number): string;
+    subscribeFund(userId: string, fundCode: string, amount: number): string | null;
+    redeemFund(userId: string, fundCode: string, shares: number): string | null;
     getFundProducts(): FundProduct[];
     getUserTrades(userId: string): FundTrade[];
 }
@@ -141,6 +141,7 @@ interface FundContract {
     manual_result?: 'win' | 'loss' | null;
     profit?: number;
     cost: number;
+    [key: string]: any;
 }
 interface ShanghaiIndex {
     current_price: number;
@@ -220,8 +221,8 @@ declare class ETFCreationEngine {
     constructor();
     onSchedulerStart: () => void;
     onTick: (now: Date) => void;
-    createETF(userId: string, etfCode: string, quantity: number): string;
-    redeemETF(userId: string, etfCode: string, quantity: number): string;
+    createETF(userId: string, etfCode: string, quantity: number): string | null;
+    redeemETF(userId: string, etfCode: string, quantity: number): string | null;
     getETFProducts(): ETFProduct[];
     getUserTrades(userId: string): ETFTrade[];
 }
@@ -261,6 +262,7 @@ interface SimulationFundContract {
     status: 'open' | 'won' | 'lost';
     cost: number;
     profit?: number;
+    [key: string]: any;
 }
 interface StoreShanghaiIndex {
     current_price: number;
@@ -300,8 +302,8 @@ interface DemoAccount {
     username: string;
     balance: number;
     equity: number;
-    positions: any[];
-    trades: any[];
+    positions: Array<Record<string, unknown>>;
+    trades: Array<Record<string, unknown>>;
     pnl: number;
 }
 interface DemoAccountState {
@@ -310,7 +312,7 @@ interface DemoAccountState {
     initDemoAccount: () => void;
     getAccount: (user_id: string) => DemoAccount | undefined;
     updateAccount: (user_id: string, updates: Partial<DemoAccount>) => void;
-    addTrade: (user_id: string, trade: any) => void;
+    addTrade: (user_id: string, trade: Record<string, unknown>) => void;
     getUserBalance: (user_id: string) => number;
 }
 declare const useAccountStore: zustand.UseBoundStore<zustand.StoreApi<DemoAccountState>>;
@@ -330,7 +332,7 @@ declare const addDays: (date: Date, days: number) => Date;
 declare const isWeekend: (date: Date) => boolean;
 declare const isWorkday: (date: Date) => boolean;
 
-declare const exportToCSV: (data: any[], filename: string) => Promise<void>;
+declare const exportToCSV: <T extends Record<string, any>>(data: T[], filename: string) => Promise<void>;
 declare const exportFundContracts: () => void;
 declare const exportTrades: () => void;
 
@@ -422,6 +424,7 @@ interface Notification {
     message: string;
     type?: 'success' | 'info' | 'warning' | 'error';
     duration?: number;
+    [key: string]: any;
 }
 declare const notify: (title: string, message: string, type?: Notification["type"]) => void;
 declare const requestNotificationPermission: () => void;

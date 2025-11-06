@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = typeof process !== 'undefined' && process.env?.VITE_SUPABASE_URL
-const SUPABASE_KEY = typeof process !== 'undefined' && process.env?.VITE_SUPABASE_ANON_KEY
+const SUPABASE_URL = (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_URL) || ''
+const SUPABASE_KEY = (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_ANON_KEY) || ''
 
 // 安全检查：确保在生产环境中提供了必要的配置
 if (typeof window !== 'undefined' && !process.env?.VITE_SUPABASE_URL) {

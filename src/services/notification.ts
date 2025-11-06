@@ -3,6 +3,7 @@ interface Notification {
   message: string
   type?: 'success' | 'info' | 'warning' | 'error'
   duration?: number
+  [key: string]: any
 }
 
 export const notify = (title: string, message: string, type: Notification['type'] = 'info') => {

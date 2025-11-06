@@ -21,6 +21,7 @@ export interface FundContract {
   manual_result?: 'win' | 'loss' | null;
   profit?: number;        // 计算盈利金额
   cost: number;           // 投入本金
+  [key: string]: any;
 }
 
 export interface ShanghaiIndex {

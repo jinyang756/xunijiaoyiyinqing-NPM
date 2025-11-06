@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver'
 import { useSimulationStore } from '../store/simulationStore'
 import { useAccountStore } from '../store/accountStore'
 
-export const exportToCSV = async (data: any[], filename: string) => {
+export const exportToCSV = async <T extends Record<string, any>>(data: T[], filename: string) => {
   // 创建工作簿
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Sheet1')

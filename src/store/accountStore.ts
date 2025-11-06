@@ -5,8 +5,8 @@ interface DemoAccount {
   username: string
   balance: number
   equity: number
-  positions: any[]
-  trades: any[]
+  positions: Array<Record<string, unknown>>
+  trades: Array<Record<string, unknown>>
   pnl: number
 }
 
@@ -17,7 +17,7 @@ interface DemoAccountState {
   initDemoAccount: () => void
   getAccount: (user_id: string) => DemoAccount | undefined
   updateAccount: (user_id: string, updates: Partial<DemoAccount>) => void
-  addTrade: (user_id: string, trade: any) => void
+  addTrade: (user_id: string, trade: Record<string, unknown>) => void
   getUserBalance: (user_id: string) => number
 }
 
@@ -57,7 +57,7 @@ export const useAccountStore = create<DemoAccountState>()((set, get) => ({
     }))
   },
 
-  addTrade: (user_id: string, trade: any) => {
+  addTrade: (user_id: string, trade: Record<string, unknown>) => {
     const account = get().getAccount(user_id)
     if (account) {
       const updatedTrades = [...account.trades, trade]

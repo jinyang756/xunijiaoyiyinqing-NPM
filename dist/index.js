@@ -1,71 +1,17 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }
 
-// src/services/supabase.ts
-var supabase_exports = {};
-__export(supabase_exports, {
-  initSupabase: () => initSupabase,
-  supabase: () => supabase
-});
-var _supabasejs = require('@supabase/supabase-js');
-var SUPABASE_URL, SUPABASE_KEY, supabase, initSupabase, createTables;
-var init_supabase = __esm({
-  "src/services/supabase.ts"() {
-    "use strict";
-    SUPABASE_URL = typeof process !== "undefined" && _optionalChain([process, 'access', _ => _.env, 'optionalAccess', _2 => _2.VITE_SUPABASE_URL]) || "";
-    SUPABASE_KEY = typeof process !== "undefined" && _optionalChain([process, 'access', _3 => _3.env, 'optionalAccess', _4 => _4.VITE_SUPABASE_ANON_KEY]) || "";
-    if (typeof window !== "undefined" && !_optionalChain([process, 'access', _5 => _5.env, 'optionalAccess', _6 => _6.VITE_SUPABASE_URL])) {
-      console.warn("\u26A0\uFE0F  Supabase URL \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_URL \u73AF\u5883\u53D8\u91CF");
-    }
-    if (typeof window !== "undefined" && !_optionalChain([process, 'access', _7 => _7.env, 'optionalAccess', _8 => _8.VITE_SUPABASE_ANON_KEY])) {
-      console.warn("\u26A0\uFE0F  Supabase Key \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_ANON_KEY \u73AF\u5883\u53D8\u91CF");
-    }
-    supabase = exports.supabase = _supabasejs.createClient.call(void 0, SUPABASE_URL, SUPABASE_KEY);
-    initSupabase = exports.initSupabase = async () => {
-      await createTables();
-      console.log("\u2705 Supabase initialized");
-    };
-    createTables = async () => {
-      try {
-        await supabase.rpc("create_fund_contracts_table");
-      } catch (error) {
-        console.log("Fund contracts table may already exist");
-      }
-      try {
-        await supabase.rpc("create_trades_table");
-      } catch (error) {
-        console.log("Trades table may already exist");
-      }
-      try {
-        await supabase.rpc("create_accounts_table");
-      } catch (error) {
-        console.log("Accounts table may already exist");
-      }
-    };
-  }
-});
+
+
+
+
+
+
+
+var _chunkNVWMXK7Njs = require('./chunk-NVWMXK7N.js');
 
 // src/store/accountStore.ts
 var accountStore_exports = {};
-__export(accountStore_exports, {
+_chunkNVWMXK7Njs.__export.call(void 0, accountStore_exports, {
   useAccountStore: () => useAccountStore,
   useAccounts: () => useAccounts,
   useActiveAccount: () => useActiveAccount,
@@ -74,7 +20,7 @@ __export(accountStore_exports, {
 var _zustand = require('zustand');
 var _immer = require('zustand/middleware/immer');
 var useAccountStore, useActiveAccount, useAccounts, useUserBalance;
-var init_accountStore = __esm({
+var init_accountStore = _chunkNVWMXK7Njs.__esm.call(void 0, {
   "src/store/accountStore.ts"() {
     "use strict";
     useAccountStore = exports.useAccountStore = _zustand.create.call(void 0, )(
@@ -137,13 +83,13 @@ var init_accountStore = __esm({
 
 // src/utils/websocket.ts
 var websocket_exports = {};
-__export(websocket_exports, {
+_chunkNVWMXK7Njs.__export.call(void 0, websocket_exports, {
   disconnectWebSocket: () => disconnectWebSocket,
   getSocket: () => getSocket,
   initWebSocket: () => initWebSocket
 });
 var socket, initWebSocket, getSocket, disconnectWebSocket;
-var init_websocket = __esm({
+var init_websocket = _chunkNVWMXK7Njs.__esm.call(void 0, {
   "src/utils/websocket.ts"() {
     "use strict";
     socket = null;
@@ -592,7 +538,6 @@ if (typeof window !== "undefined") {
 }
 
 // src/engines/fundContract.ts
-init_supabase();
 var FundContractEngine = class {
   // 0.7% per day
   constructor() {
@@ -710,8 +655,14 @@ var FundContractEngine = class {
     notify("\u5408\u7EA6\u7ED3\u7B97", `${contract.type === "shanghai" ? "\u4E0A\u8BC1" : "\u6052\u751F"}\u5408\u7EA6 ${result === "win" ? "\u76C8\u5229" : "\u4E8F\u635F"} \xA5${Math.abs(contract.profit)}`);
   }
   async persistContract(contract) {
+    const { getSupabaseClient: getSupabaseClient2 } = await Promise.resolve().then(() => _interopRequireWildcard(require("./supabase-DAFUMFG7.js")));
+    const client = getSupabaseClient2();
+    if (!client) {
+      console.warn("Supabase client not available");
+      return;
+    }
     try {
-      await supabase.from("fund_contracts").insert({
+      await client.from("fund_contracts").insert({
         contract_id: contract.contract_id,
         type: contract.type,
         strike_price: contract.strike_price,
@@ -1132,9 +1083,9 @@ var isDataMaskingEnabled = () => {
 };
 
 // src/index.ts
-init_supabase();
+_chunkNVWMXK7Njs.init_supabase.call(void 0, );
 var initSimulation = (opts) => {
-  const scheduler = new Scheduler(_optionalChain([opts, 'optionalAccess', _9 => _9.startAt]), { speed: _optionalChain([opts, 'optionalAccess', _10 => _10.speed]) || 60 });
+  const scheduler = new Scheduler(_optionalChain([opts, 'optionalAccess', _ => _.startAt]), { speed: _optionalChain([opts, 'optionalAccess', _2 => _2.speed]) || 60 });
   const engines = [
     new IpoEngine(),
     new SeatEngine(),
@@ -1142,22 +1093,22 @@ var initSimulation = (opts) => {
     new FundEngine(),
     new FundContractEngine()
   ];
-  if (_optionalChain([opts, 'optionalAccess', _11 => _11.enableFutures]) !== false)
+  if (_optionalChain([opts, 'optionalAccess', _3 => _3.enableFutures]) !== false)
     engines.push(new FuturesArbEngine());
-  if (_optionalChain([opts, 'optionalAccess', _12 => _12.enableETF]) !== false)
+  if (_optionalChain([opts, 'optionalAccess', _4 => _4.enableETF]) !== false)
     engines.push(new ETFCreationEngine());
-  if (_optionalChain([opts, 'optionalAccess', _13 => _13.enableOptions]) !== false)
+  if (_optionalChain([opts, 'optionalAccess', _5 => _5.enableOptions]) !== false)
     engines.push(new OptionsEngine());
-  if (_optionalChain([opts, 'optionalAccess', _14 => _14.enableSupabase])) {
-    const { initSupabase: initSupabase2 } = (init_supabase(), __toCommonJS(supabase_exports));
+  if (_optionalChain([opts, 'optionalAccess', _6 => _6.enableSupabase])) {
+    const { initSupabase: initSupabase2 } = (_chunkNVWMXK7Njs.init_supabase.call(void 0, ), _chunkNVWMXK7Njs.__toCommonJS.call(void 0, _chunkNVWMXK7Njs.supabase_exports));
     initSupabase2();
   }
-  if (_optionalChain([opts, 'optionalAccess', _15 => _15.enableWebSocket])) {
-    const { initWebSocket: initWebSocket2 } = (init_websocket(), __toCommonJS(websocket_exports));
+  if (_optionalChain([opts, 'optionalAccess', _7 => _7.enableWebSocket])) {
+    const { initWebSocket: initWebSocket2 } = (init_websocket(), _chunkNVWMXK7Njs.__toCommonJS.call(void 0, websocket_exports));
     initWebSocket2();
   }
-  if (_optionalChain([opts, 'optionalAccess', _16 => _16.demoAccount])) {
-    const { initDemoAccount } = (init_accountStore(), __toCommonJS(accountStore_exports));
+  if (_optionalChain([opts, 'optionalAccess', _8 => _8.demoAccount])) {
+    const { initDemoAccount } = (init_accountStore(), _chunkNVWMXK7Njs.__toCommonJS.call(void 0, accountStore_exports));
     initDemoAccount();
   }
   scheduler.start();
@@ -1224,4 +1175,5 @@ var initSimulation = (opts) => {
 
 
 
-exports.BlockEngine = BlockEngine; exports.ETFCreationEngine = ETFCreationEngine; exports.FundContractEngine = FundContractEngine; exports.FundEngine = FundEngine; exports.FuturesArbEngine = FuturesArbEngine; exports.IpoEngine = IpoEngine; exports.OptionsEngine = OptionsEngine; exports.Scheduler = Scheduler; exports.SeatEngine = SeatEngine; exports.addDays = addDays; exports.addHours = addHours; exports.addMinutes = addMinutes; exports.bus = bus; exports.disconnectWebSocket = disconnectWebSocket; exports.enableDataMasking = enableDataMasking; exports.eventBus = eventBus; exports.exportFundContracts = exportFundContracts; exports.exportToCSV = exportToCSV; exports.exportTrades = exportTrades; exports.formatDate = formatDate; exports.formatDateTime = formatDateTime; exports.formatTime = formatTime; exports.getSocket = getSocket; exports.initSimulation = initSimulation; exports.initSupabase = initSupabase; exports.initWebSocket = initWebSocket; exports.isDataMaskingEnabled = isDataMaskingEnabled; exports.isWeekend = isWeekend; exports.isWorkday = isWorkday; exports.maskAccount = maskAccount; exports.maskAmount = maskAmount; exports.maskBalance = maskBalance; exports.maskContract = maskContract; exports.maskContractId = maskContractId; exports.maskContracts = maskContracts; exports.maskIndex = maskIndex; exports.maskTrades = maskTrades; exports.maskUserId = maskUserId; exports.maskUsername = maskUsername; exports.notify = notify; exports.randomBoolean = randomBoolean; exports.randomChoice = randomChoice; exports.randomFloat = randomFloat; exports.randomInt = randomInt; exports.randomShuffle = randomShuffle; exports.requestNotificationPermission = requestNotificationPermission; exports.supabase = supabase; exports.useAccountStore = useAccountStore; exports.useAccounts = useAccounts; exports.useActiveAccount = useActiveAccount; exports.useContractById = useContractById; exports.useContracts = useContracts; exports.useFundNavByCode = useFundNavByCode; exports.useFundNavs = useFundNavs; exports.useFundVolatilities = useFundVolatilities; exports.useHongkongIndex = useHongkongIndex; exports.useIpoWinRate = useIpoWinRate; exports.useShanghaiIndex = useShanghaiIndex; exports.useSimulationStore = useSimulationStore; exports.useUserBalance = useUserBalance;
+
+exports.BlockEngine = BlockEngine; exports.ETFCreationEngine = ETFCreationEngine; exports.FundContractEngine = FundContractEngine; exports.FundEngine = FundEngine; exports.FuturesArbEngine = FuturesArbEngine; exports.IpoEngine = IpoEngine; exports.OptionsEngine = OptionsEngine; exports.Scheduler = Scheduler; exports.SeatEngine = SeatEngine; exports.addDays = addDays; exports.addHours = addHours; exports.addMinutes = addMinutes; exports.bus = bus; exports.disconnectWebSocket = disconnectWebSocket; exports.enableDataMasking = enableDataMasking; exports.eventBus = eventBus; exports.exportFundContracts = exportFundContracts; exports.exportToCSV = exportToCSV; exports.exportTrades = exportTrades; exports.formatDate = formatDate; exports.formatDateTime = formatDateTime; exports.formatTime = formatTime; exports.getSocket = getSocket; exports.getSupabaseClient = _chunkNVWMXK7Njs.getSupabaseClient; exports.initSimulation = initSimulation; exports.initSupabase = _chunkNVWMXK7Njs.initSupabase; exports.initWebSocket = initWebSocket; exports.isDataMaskingEnabled = isDataMaskingEnabled; exports.isWeekend = isWeekend; exports.isWorkday = isWorkday; exports.maskAccount = maskAccount; exports.maskAmount = maskAmount; exports.maskBalance = maskBalance; exports.maskContract = maskContract; exports.maskContractId = maskContractId; exports.maskContracts = maskContracts; exports.maskIndex = maskIndex; exports.maskTrades = maskTrades; exports.maskUserId = maskUserId; exports.maskUsername = maskUsername; exports.notify = notify; exports.randomBoolean = randomBoolean; exports.randomChoice = randomChoice; exports.randomFloat = randomFloat; exports.randomInt = randomInt; exports.randomShuffle = randomShuffle; exports.requestNotificationPermission = requestNotificationPermission; exports.supabase = _chunkNVWMXK7Njs.supabase; exports.useAccountStore = useAccountStore; exports.useAccounts = useAccounts; exports.useActiveAccount = useActiveAccount; exports.useContractById = useContractById; exports.useContracts = useContracts; exports.useFundNavByCode = useFundNavByCode; exports.useFundNavs = useFundNavs; exports.useFundVolatilities = useFundVolatilities; exports.useHongkongIndex = useHongkongIndex; exports.useIpoWinRate = useIpoWinRate; exports.useShanghaiIndex = useShanghaiIndex; exports.useSimulationStore = useSimulationStore; exports.useUserBalance = useUserBalance;

@@ -2,7 +2,7 @@ import * as mitt from 'mitt';
 import { Emitter } from 'mitt';
 import * as zustand from 'zustand';
 import * as immer from 'immer';
-import * as _supabase_supabase_js from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 declare const bus: Emitter<{
     tick: Date;
@@ -429,8 +429,9 @@ declare const enableDataMasking: (enable?: boolean) => void;
  */
 declare const isDataMaskingEnabled: () => boolean;
 
-declare const supabase: _supabase_supabase_js.SupabaseClient<any, "public", "public", any, any>;
-declare const initSupabase: () => Promise<void>;
+declare const getSupabaseClient: () => SupabaseClient | null;
+declare const supabase: SupabaseClient<any, "public", "public", any, any> | null;
+declare const initSupabase: () => Promise<boolean>;
 
 interface Notification {
     title: string;
@@ -456,4 +457,4 @@ interface InitOptions {
 }
 declare const initSimulation: (opts?: InitOptions) => Scheduler;
 
-export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, enableDataMasking, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, initSimulation, initSupabase, initWebSocket, isDataMaskingEnabled, isWeekend, isWorkday, maskAccount, maskAmount, maskBalance, maskContract, maskContractId, maskContracts, maskIndex, maskTrades, maskUserId, maskUsername, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useAccounts, useActiveAccount, useContractById, useContracts, useFundNavByCode, useFundNavs, useFundVolatilities, useHongkongIndex, useIpoWinRate, useShanghaiIndex, useSimulationStore, useUserBalance };
+export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, enableDataMasking, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, getSupabaseClient, initSimulation, initSupabase, initWebSocket, isDataMaskingEnabled, isWeekend, isWorkday, maskAccount, maskAmount, maskBalance, maskContract, maskContractId, maskContracts, maskIndex, maskTrades, maskUserId, maskUsername, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useAccounts, useActiveAccount, useContractById, useContracts, useFundNavByCode, useFundNavs, useFundVolatilities, useHongkongIndex, useIpoWinRate, useShanghaiIndex, useSimulationStore, useUserBalance };

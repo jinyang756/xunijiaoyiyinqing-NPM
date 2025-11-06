@@ -3,7 +3,6 @@ import { add, format, isBefore, parseISO, differenceInMinutes } from 'date-fns'
 import { nanoid } from 'nanoid'
 import { useSimulationStore } from '../store/simulationStore'
 import { notify } from '../services/notification'
-import { supabase } from '../services/supabase'
 
 export type ContractType = 'shanghai' | 'hongkong';
 
@@ -192,8 +191,17 @@ export class FundContractEngine {
   }
 
   async persistContract(contract: FundContract) {
+    // 动态导入supabase客户端以避免循环依赖
+    const { getSupabaseClient } = await import('../services/supabase');
+    const client = getSupabaseClient();
+    
+    if (!client) {
+      console.warn('Supabase client not available');
+      return;
+    }
+    
     try {
-      await supabase.from('fund_contracts').insert({
+      await client.from('fund_contracts').insert({
         contract_id: contract.contract_id,
         type: contract.type,
         strike_price: contract.strike_price,

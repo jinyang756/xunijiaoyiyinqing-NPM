@@ -1,67 +1,13 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/services/supabase.ts
-var supabase_exports = {};
-__export(supabase_exports, {
-  initSupabase: () => initSupabase,
-  supabase: () => supabase
-});
-import { createClient } from "@supabase/supabase-js";
-var SUPABASE_URL, SUPABASE_KEY, supabase, initSupabase, createTables;
-var init_supabase = __esm({
-  "src/services/supabase.ts"() {
-    "use strict";
-    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL || "";
-    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY || "";
-    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_URL) {
-      console.warn("\u26A0\uFE0F  Supabase URL \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_URL \u73AF\u5883\u53D8\u91CF");
-    }
-    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_ANON_KEY) {
-      console.warn("\u26A0\uFE0F  Supabase Key \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_ANON_KEY \u73AF\u5883\u53D8\u91CF");
-    }
-    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-    initSupabase = async () => {
-      await createTables();
-      console.log("\u2705 Supabase initialized");
-    };
-    createTables = async () => {
-      try {
-        await supabase.rpc("create_fund_contracts_table");
-      } catch (error) {
-        console.log("Fund contracts table may already exist");
-      }
-      try {
-        await supabase.rpc("create_trades_table");
-      } catch (error) {
-        console.log("Trades table may already exist");
-      }
-      try {
-        await supabase.rpc("create_accounts_table");
-      } catch (error) {
-        console.log("Accounts table may already exist");
-      }
-    };
-  }
-});
+import {
+  __esm,
+  __export,
+  __toCommonJS,
+  getSupabaseClient,
+  initSupabase,
+  init_supabase,
+  supabase,
+  supabase_exports
+} from "./chunk-OG7LT6QE.mjs";
 
 // src/store/accountStore.ts
 var accountStore_exports = {};
@@ -592,7 +538,6 @@ if (typeof window !== "undefined") {
 }
 
 // src/engines/fundContract.ts
-init_supabase();
 var FundContractEngine = class {
   // 0.7% per day
   constructor() {
@@ -710,8 +655,14 @@ var FundContractEngine = class {
     notify("\u5408\u7EA6\u7ED3\u7B97", `${contract.type === "shanghai" ? "\u4E0A\u8BC1" : "\u6052\u751F"}\u5408\u7EA6 ${result === "win" ? "\u76C8\u5229" : "\u4E8F\u635F"} \xA5${Math.abs(contract.profit)}`);
   }
   async persistContract(contract) {
+    const { getSupabaseClient: getSupabaseClient2 } = await import("./supabase-IMBQQ4LJ.mjs");
+    const client = getSupabaseClient2();
+    if (!client) {
+      console.warn("Supabase client not available");
+      return;
+    }
     try {
-      await supabase.from("fund_contracts").insert({
+      await client.from("fund_contracts").insert({
         contract_id: contract.contract_id,
         type: contract.type,
         strike_price: contract.strike_price,
@@ -1187,6 +1138,7 @@ export {
   formatDateTime,
   formatTime,
   getSocket,
+  getSupabaseClient,
   initSimulation,
   initSupabase,
   initWebSocket,

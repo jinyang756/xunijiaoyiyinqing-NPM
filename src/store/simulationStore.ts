@@ -128,6 +128,23 @@ export const useSimulationStore = create<SimulationState>()((set, get) => ({
   }))
 }))
 
+// 状态选择器
+export const useContracts = () => useSimulationStore(state => state.contracts)
+export const useShanghaiIndex = () => useSimulationStore(state => state.shanghaiIndex)
+export const useHongkongIndex = () => useSimulationStore(state => state.hongkongIndex)
+export const useFundNavs = () => useSimulationStore(state => state.fundNavs)
+export const useIpoWinRate = () => useSimulationStore(state => state.ipoWinRate)
+export const useFundVolatilities = () => useSimulationStore(state => state.fundVolatilities)
+
+// 状态选择器（带参数）
+export const useContractById = (contractId: string) => useSimulationStore(state => 
+  state.contracts.find(contract => contract.contract_id === contractId)
+)
+
+export const useFundNavByCode = (fundCode: string) => useSimulationStore(state => 
+  state.fundNavs.find(nav => nav.fund_code === fundCode)
+)
+
 // 暴露到全局window对象（用于其他模块访问）
 if (typeof window !== 'undefined') {
   (window as any).simStore = {

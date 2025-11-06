@@ -77,55 +77,66 @@ var init_supabase = __esm({
 // src/store/accountStore.ts
 var accountStore_exports = {};
 __export(accountStore_exports, {
-  useAccountStore: () => useAccountStore
+  useAccountStore: () => useAccountStore,
+  useAccounts: () => useAccounts,
+  useActiveAccount: () => useActiveAccount,
+  useUserBalance: () => useUserBalance
 });
-var import_zustand2, useAccountStore;
+var import_zustand2, import_immer, useAccountStore, useActiveAccount, useAccounts, useUserBalance;
 var init_accountStore = __esm({
   "src/store/accountStore.ts"() {
     "use strict";
     import_zustand2 = require("zustand");
-    useAccountStore = (0, import_zustand2.create)()((set, get) => ({
-      accounts: [],
-      activeAccount: null,
-      initDemoAccount: () => {
-        const demoAccount = {
-          user_id: "demo_001",
-          username: "\u6F14\u793A\u7528\u6237",
-          balance: 1e5,
-          // 10万起始资金
-          equity: 1e5,
-          positions: [],
-          trades: [],
-          pnl: 0
-        };
-        set((state) => ({
-          accounts: [...state.accounts, demoAccount],
-          activeAccount: demoAccount
-        }));
-        window.demoAccountStore = get();
-      },
-      getAccount: (user_id) => {
-        return get().accounts.find((account) => account.user_id === user_id);
-      },
-      updateAccount: (user_id, updates) => {
-        set((state) => ({
-          accounts: state.accounts.map(
-            (account) => account.user_id === user_id ? { ...account, ...updates } : account
-          )
-        }));
-      },
-      addTrade: (user_id, trade) => {
-        const account = get().getAccount(user_id);
-        if (account) {
-          const updatedTrades = [...account.trades, trade];
-          get().updateAccount(user_id, { trades: updatedTrades });
+    import_immer = require("zustand/middleware/immer");
+    useAccountStore = (0, import_zustand2.create)()(
+      (0, import_immer.immer)((set, get) => ({
+        accounts: [],
+        activeAccount: null,
+        initDemoAccount: () => {
+          const demoAccount = {
+            user_id: "demo_001",
+            username: "\u6F14\u793A\u7528\u6237",
+            balance: 1e5,
+            // 10万起始资金
+            equity: 1e5,
+            positions: [],
+            trades: [],
+            pnl: 0
+          };
+          set((state) => {
+            state.accounts.push(demoAccount);
+            state.activeAccount = demoAccount;
+          });
+          window.demoAccountStore = get();
+        },
+        getAccount: (user_id) => {
+          return get().accounts.find((account) => account.user_id === user_id);
+        },
+        updateAccount: (user_id, updates) => {
+          set((state) => {
+            const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
+            if (accountIndex !== -1) {
+              Object.assign(state.accounts[accountIndex], updates);
+            }
+          });
+        },
+        addTrade: (user_id, trade) => {
+          set((state) => {
+            const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
+            if (accountIndex !== -1) {
+              state.accounts[accountIndex].trades.push(trade);
+            }
+          });
+        },
+        getUserBalance: (user_id) => {
+          const account = get().getAccount(user_id);
+          return account ? account.balance : 0;
         }
-      },
-      getUserBalance: (user_id) => {
-        const account = get().getAccount(user_id);
-        return account ? account.balance : 0;
-      }
-    }));
+      }))
+    );
+    useActiveAccount = () => useAccountStore((state) => state.activeAccount);
+    useAccounts = () => useAccountStore((state) => state.accounts);
+    useUserBalance = (user_id) => useAccountStore((state) => state.getUserBalance(user_id));
     if (typeof window !== "undefined") {
       window.initDemoAccount = () => {
         const { initDemoAccount } = useAccountStore.getState();
@@ -214,7 +225,18 @@ __export(src_exports, {
   requestNotificationPermission: () => requestNotificationPermission,
   supabase: () => supabase,
   useAccountStore: () => useAccountStore,
-  useSimulationStore: () => useSimulationStore
+  useAccounts: () => useAccounts,
+  useActiveAccount: () => useActiveAccount,
+  useContractById: () => useContractById,
+  useContracts: () => useContracts,
+  useFundNavByCode: () => useFundNavByCode,
+  useFundNavs: () => useFundNavs,
+  useFundVolatilities: () => useFundVolatilities,
+  useHongkongIndex: () => useHongkongIndex,
+  useIpoWinRate: () => useIpoWinRate,
+  useShanghaiIndex: () => useShanghaiIndex,
+  useSimulationStore: () => useSimulationStore,
+  useUserBalance: () => useUserBalance
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -613,6 +635,18 @@ var useSimulationStore = (0, import_zustand.create)()((set, get) => ({
     })
   }))
 }));
+var useContracts = () => useSimulationStore((state) => state.contracts);
+var useShanghaiIndex = () => useSimulationStore((state) => state.shanghaiIndex);
+var useHongkongIndex = () => useSimulationStore((state) => state.hongkongIndex);
+var useFundNavs = () => useSimulationStore((state) => state.fundNavs);
+var useIpoWinRate = () => useSimulationStore((state) => state.ipoWinRate);
+var useFundVolatilities = () => useSimulationStore((state) => state.fundVolatilities);
+var useContractById = (contractId) => useSimulationStore(
+  (state) => state.contracts.find((contract) => contract.contract_id === contractId)
+);
+var useFundNavByCode = (fundCode) => useSimulationStore(
+  (state) => state.fundNavs.find((nav) => nav.fund_code === fundCode)
+);
 if (typeof window !== "undefined") {
   window.simStore = {
     addContract: (contract) => {
@@ -1256,5 +1290,16 @@ var initSimulation = (opts) => {
   requestNotificationPermission,
   supabase,
   useAccountStore,
-  useSimulationStore
+  useAccounts,
+  useActiveAccount,
+  useContractById,
+  useContracts,
+  useFundNavByCode,
+  useFundNavs,
+  useFundVolatilities,
+  useHongkongIndex,
+  useIpoWinRate,
+  useShanghaiIndex,
+  useSimulationStore,
+  useUserBalance
 });

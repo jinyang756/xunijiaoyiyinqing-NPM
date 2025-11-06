@@ -1,5 +1,7 @@
-import mitt, { Emitter } from 'mitt';
+import * as mitt from 'mitt';
+import { Emitter } from 'mitt';
 import * as zustand from 'zustand';
+import * as immer from 'immer';
 import * as _supabase_supabase_js from '@supabase/supabase-js';
 
 declare const bus: Emitter<{
@@ -24,10 +26,8 @@ declare class Scheduler {
 }
 
 declare const eventBus: mitt.Emitter<Record<mitt.EventType, unknown>>;
-type EventType = typeof mitt extends () => {
-    emit: infer E;
-} ? E extends (event: infer T, payload?: infer P) => void ? T : never : never;
-type EventHandler<T = any> = (payload?: T) => void;
+type EventType = string | symbol;
+type EventHandler<T = unknown> = (payload?: T) => void;
 
 interface IpoStock {
     stock_id: string;
@@ -296,6 +296,14 @@ interface SimulationState {
     setContractResult: (contractId: string, result: 'win' | 'loss') => void;
 }
 declare const useSimulationStore: zustand.UseBoundStore<zustand.StoreApi<SimulationState>>;
+declare const useContracts: () => SimulationFundContract[];
+declare const useShanghaiIndex: () => StoreShanghaiIndex;
+declare const useHongkongIndex: () => StoreHongKongIndex;
+declare const useFundNavs: () => FundNav[];
+declare const useIpoWinRate: () => number;
+declare const useFundVolatilities: () => Record<string, number>;
+declare const useContractById: (contractId: string) => SimulationFundContract | undefined;
+declare const useFundNavByCode: (fundCode: string) => FundNav | undefined;
 
 interface DemoAccount {
     user_id: string;
@@ -315,7 +323,12 @@ interface DemoAccountState {
     addTrade: (user_id: string, trade: Record<string, unknown>) => void;
     getUserBalance: (user_id: string) => number;
 }
-declare const useAccountStore: zustand.UseBoundStore<zustand.StoreApi<DemoAccountState>>;
+declare const useAccountStore: zustand.UseBoundStore<Omit<zustand.StoreApi<DemoAccountState>, "setState"> & {
+    setState(nextStateOrUpdater: DemoAccountState | Partial<DemoAccountState> | ((state: immer.WritableDraft<DemoAccountState>) => void), shouldReplace?: boolean | undefined): void;
+}>;
+declare const useActiveAccount: () => DemoAccount | null;
+declare const useAccounts: () => DemoAccount[];
+declare const useUserBalance: (user_id: string) => number;
 
 declare const randomInt: (min: number, max: number) => number;
 declare const randomFloat: (min: number, max: number, decimals?: number) => number;
@@ -443,4 +456,4 @@ interface InitOptions {
 }
 declare const initSimulation: (opts?: InitOptions) => Scheduler;
 
-export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, enableDataMasking, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, initSimulation, initSupabase, initWebSocket, isDataMaskingEnabled, isWeekend, isWorkday, maskAccount, maskAmount, maskBalance, maskContract, maskContractId, maskContracts, maskIndex, maskTrades, maskUserId, maskUsername, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useSimulationStore };
+export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, enableDataMasking, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, initSimulation, initSupabase, initWebSocket, isDataMaskingEnabled, isWeekend, isWorkday, maskAccount, maskAmount, maskBalance, maskContract, maskContractId, maskContracts, maskIndex, maskTrades, maskUserId, maskUsername, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useAccounts, useActiveAccount, useContractById, useContracts, useFundNavByCode, useFundNavs, useFundVolatilities, useHongkongIndex, useIpoWinRate, useShanghaiIndex, useSimulationStore, useUserBalance };

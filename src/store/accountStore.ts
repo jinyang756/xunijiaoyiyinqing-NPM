@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
 
 interface DemoAccount {
   user_id: string
@@ -21,7 +22,8 @@ interface DemoAccountState {
   getUserBalance: (user_id: string) => number
 }
 
-export const useAccountStore = create<DemoAccountState>()((set, get) => ({
+export const useAccountStore = create<DemoAccountState>()(
+  immer((set, get) => ({
   accounts: [],
   activeAccount: null,
 
@@ -36,10 +38,10 @@ export const useAccountStore = create<DemoAccountState>()((set, get) => ({
       pnl: 0
     }
 
-    set(state => ({
-      accounts: [...state.accounts, demoAccount],
-      activeAccount: demoAccount
-    }))
+    set((state) => {
+      state.accounts.push(demoAccount)
+      state.activeAccount = demoAccount
+    })
 
     // 暴露到全局，便于引擎访问
     ;(window as any).demoAccountStore = get()
@@ -50,26 +52,34 @@ export const useAccountStore = create<DemoAccountState>()((set, get) => ({
   },
 
   updateAccount: (user_id: string, updates: Partial<DemoAccount>) => {
-    set(state => ({
-      accounts: state.accounts.map(account =>
-        account.user_id === user_id ? { ...account, ...updates } : account
-      )
-    }))
+    set((state) => {
+      const accountIndex = state.accounts.findIndex(account => account.user_id === user_id)
+      if (accountIndex !== -1) {
+        Object.assign(state.accounts[accountIndex], updates)
+      }
+    })
   },
 
   addTrade: (user_id: string, trade: Record<string, unknown>) => {
-    const account = get().getAccount(user_id)
-    if (account) {
-      const updatedTrades = [...account.trades, trade]
-      get().updateAccount(user_id, { trades: updatedTrades })
-    }
+    set((state) => {
+      const accountIndex = state.accounts.findIndex(account => account.user_id === user_id)
+      if (accountIndex !== -1) {
+        state.accounts[accountIndex].trades.push(trade)
+      }
+    })
   },
 
   getUserBalance: (user_id: string) => {
     const account = get().getAccount(user_id)
     return account ? account.balance : 0
   }
-}))
+  }))
+)
+
+// 状态选择器
+export const useActiveAccount = () => useAccountStore(state => state.activeAccount)
+export const useAccounts = () => useAccountStore(state => state.accounts)
+export const useUserBalance = (user_id: string) => useAccountStore(state => state.getUserBalance(user_id))
 
 // 暴露到全局
 if (typeof window !== 'undefined') {

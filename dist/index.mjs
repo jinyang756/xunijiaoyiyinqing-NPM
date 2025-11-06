@@ -66,55 +66,66 @@ var init_supabase = __esm({
 // src/store/accountStore.ts
 var accountStore_exports = {};
 __export(accountStore_exports, {
-  useAccountStore: () => useAccountStore
+  useAccountStore: () => useAccountStore,
+  useAccounts: () => useAccounts,
+  useActiveAccount: () => useActiveAccount,
+  useUserBalance: () => useUserBalance
 });
 import { create as create2 } from "zustand";
-var useAccountStore;
+import { immer } from "zustand/middleware/immer";
+var useAccountStore, useActiveAccount, useAccounts, useUserBalance;
 var init_accountStore = __esm({
   "src/store/accountStore.ts"() {
     "use strict";
-    useAccountStore = create2()((set, get) => ({
-      accounts: [],
-      activeAccount: null,
-      initDemoAccount: () => {
-        const demoAccount = {
-          user_id: "demo_001",
-          username: "\u6F14\u793A\u7528\u6237",
-          balance: 1e5,
-          // 10万起始资金
-          equity: 1e5,
-          positions: [],
-          trades: [],
-          pnl: 0
-        };
-        set((state) => ({
-          accounts: [...state.accounts, demoAccount],
-          activeAccount: demoAccount
-        }));
-        window.demoAccountStore = get();
-      },
-      getAccount: (user_id) => {
-        return get().accounts.find((account) => account.user_id === user_id);
-      },
-      updateAccount: (user_id, updates) => {
-        set((state) => ({
-          accounts: state.accounts.map(
-            (account) => account.user_id === user_id ? { ...account, ...updates } : account
-          )
-        }));
-      },
-      addTrade: (user_id, trade) => {
-        const account = get().getAccount(user_id);
-        if (account) {
-          const updatedTrades = [...account.trades, trade];
-          get().updateAccount(user_id, { trades: updatedTrades });
+    useAccountStore = create2()(
+      immer((set, get) => ({
+        accounts: [],
+        activeAccount: null,
+        initDemoAccount: () => {
+          const demoAccount = {
+            user_id: "demo_001",
+            username: "\u6F14\u793A\u7528\u6237",
+            balance: 1e5,
+            // 10万起始资金
+            equity: 1e5,
+            positions: [],
+            trades: [],
+            pnl: 0
+          };
+          set((state) => {
+            state.accounts.push(demoAccount);
+            state.activeAccount = demoAccount;
+          });
+          window.demoAccountStore = get();
+        },
+        getAccount: (user_id) => {
+          return get().accounts.find((account) => account.user_id === user_id);
+        },
+        updateAccount: (user_id, updates) => {
+          set((state) => {
+            const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
+            if (accountIndex !== -1) {
+              Object.assign(state.accounts[accountIndex], updates);
+            }
+          });
+        },
+        addTrade: (user_id, trade) => {
+          set((state) => {
+            const accountIndex = state.accounts.findIndex((account) => account.user_id === user_id);
+            if (accountIndex !== -1) {
+              state.accounts[accountIndex].trades.push(trade);
+            }
+          });
+        },
+        getUserBalance: (user_id) => {
+          const account = get().getAccount(user_id);
+          return account ? account.balance : 0;
         }
-      },
-      getUserBalance: (user_id) => {
-        const account = get().getAccount(user_id);
-        return account ? account.balance : 0;
-      }
-    }));
+      }))
+    );
+    useActiveAccount = () => useAccountStore((state) => state.activeAccount);
+    useAccounts = () => useAccountStore((state) => state.accounts);
+    useUserBalance = (user_id) => useAccountStore((state) => state.getUserBalance(user_id));
     if (typeof window !== "undefined") {
       window.initDemoAccount = () => {
         const { initDemoAccount } = useAccountStore.getState();
@@ -547,6 +558,18 @@ var useSimulationStore = create()((set, get) => ({
     })
   }))
 }));
+var useContracts = () => useSimulationStore((state) => state.contracts);
+var useShanghaiIndex = () => useSimulationStore((state) => state.shanghaiIndex);
+var useHongkongIndex = () => useSimulationStore((state) => state.hongkongIndex);
+var useFundNavs = () => useSimulationStore((state) => state.fundNavs);
+var useIpoWinRate = () => useSimulationStore((state) => state.ipoWinRate);
+var useFundVolatilities = () => useSimulationStore((state) => state.fundVolatilities);
+var useContractById = (contractId) => useSimulationStore(
+  (state) => state.contracts.find((contract) => contract.contract_id === contractId)
+);
+var useFundNavByCode = (fundCode) => useSimulationStore(
+  (state) => state.fundNavs.find((nav) => nav.fund_code === fundCode)
+);
 if (typeof window !== "undefined") {
   window.simStore = {
     addContract: (contract) => {
@@ -1189,5 +1212,16 @@ export {
   requestNotificationPermission,
   supabase,
   useAccountStore,
-  useSimulationStore
+  useAccounts,
+  useActiveAccount,
+  useContractById,
+  useContracts,
+  useFundNavByCode,
+  useFundNavs,
+  useFundVolatilities,
+  useHongkongIndex,
+  useIpoWinRate,
+  useShanghaiIndex,
+  useSimulationStore,
+  useUserBalance
 };

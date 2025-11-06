@@ -1,17 +1,29 @@
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useSimulationStore } from '../store/simulationStore'
 import { useAccountStore } from '../store/accountStore'
 
-export const exportToCSV = (data: any[], filename: string) => {
-  // 转换为工作簿
-  const ws = XLSX.utils.json_to_sheet(data)
-  const wb = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
+export const exportToCSV = async (data: any[], filename: string) => {
+  // 创建工作簿
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('Sheet1')
+  
+  // 如果有数据，添加表头和数据
+  if (data.length > 0) {
+    // 添加表头
+    const headers = Object.keys(data[0])
+    worksheet.addRow(headers)
+    
+    // 添加数据行
+    data.forEach(item => {
+      const row = headers.map(header => item[header])
+      worksheet.addRow(row)
+    })
+  }
   
   // 生成Excel文件
-  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-  const dataBlob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+  const buffer = await workbook.xlsx.writeBuffer()
+  const dataBlob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
   
   // 下载文件
   saveAs(dataBlob, `${filename}_${new Date().toISOString().slice(0, 10)}.xlsx`)

@@ -330,13 +330,89 @@ declare const addDays: (date: Date, days: number) => Date;
 declare const isWeekend: (date: Date) => boolean;
 declare const isWorkday: (date: Date) => boolean;
 
-declare const exportToCSV: (data: any[], filename: string) => void;
+declare const exportToCSV: (data: any[], filename: string) => Promise<void>;
 declare const exportFundContracts: () => void;
 declare const exportTrades: () => void;
 
 declare const initWebSocket: () => void;
 declare const getSocket: () => any;
 declare const disconnectWebSocket: () => void;
+
+/**
+ * 数据脱敏工具模块
+ * 提供各种数据脱敏功能，保护用户隐私和敏感信息
+ */
+/**
+ * 脱敏用户ID
+ * @param userId 原始用户ID
+ * @returns 脱敏后的用户ID
+ */
+declare const maskUserId: (userId: string) => string;
+/**
+ * 脱敏用户名
+ * @param username 原始用户名
+ * @returns 脱敏后的用户名
+ */
+declare const maskUsername: (username: string) => string;
+/**
+ * 脱敏账户余额
+ * @param balance 原始余额
+ * @param precision 保留小数位数
+ * @returns 脱敏后的余额（只保留整数部分的前两位）
+ */
+declare const maskBalance: (balance: number, precision?: number) => string;
+/**
+ * 脱敏交易金额
+ * @param amount 原始金额
+ * @returns 脱敏后的金额
+ */
+declare const maskAmount: (amount: number) => string;
+/**
+ * 脱敏合约ID
+ * @param contractId 原始合约ID
+ * @returns 脱敏后的合约ID
+ */
+declare const maskContractId: (contractId: string) => string;
+/**
+ * 脱敏交易记录
+ * @param trades 原始交易记录数组
+ * @returns 脱敏后的交易记录数组
+ */
+declare const maskTrades: (trades: any[]) => any[];
+/**
+ * 脱敏账户信息
+ * @param account 原始账户信息
+ * @returns 脱敏后的账户信息
+ */
+declare const maskAccount: (account: any) => any;
+/**
+ * 脱敏合约信息
+ * @param contract 原始合约信息
+ * @returns 脱敏后的合约信息
+ */
+declare const maskContract: (contract: any) => any;
+/**
+ * 脱敏所有合约信息
+ * @param contracts 原始合约数组
+ * @returns 脱敏后的合约数组
+ */
+declare const maskContracts: (contracts: any[]) => any[];
+/**
+ * 脱敏指数信息
+ * @param index 原始指数信息
+ * @returns 脱敏后的指数信息
+ */
+declare const maskIndex: (index: any) => any;
+/**
+ * 启用数据脱敏模式
+ * @param enable 是否启用脱敏
+ */
+declare const enableDataMasking: (enable?: boolean) => void;
+/**
+ * 检查是否启用了数据脱敏
+ * @returns 是否启用了数据脱敏
+ */
+declare const isDataMaskingEnabled: () => boolean;
 
 declare const supabase: _supabase_supabase_js.SupabaseClient<any, "public", "public", any, any>;
 declare const initSupabase: () => Promise<void>;
@@ -364,4 +440,4 @@ interface InitOptions {
 }
 declare const initSimulation: (opts?: InitOptions) => Scheduler;
 
-export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, initSimulation, initSupabase, initWebSocket, isWeekend, isWorkday, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useSimulationStore };
+export { BlockEngine, BlockTrade, ContractType, ETFCreationEngine, ETFProduct, ETFTrade, EventHandler, EventType, FundContract, FundContractEngine, FundEngine, FundNav, FundProduct, FundTrade, FuturesArbEngine, FuturesContract, HongKongIndex, IpoEngine, IpoStock, OptionContract, OptionsEngine, Scheduler, SchedulerOptions, SeatEngine, SeatTrade, ShanghaiIndex, StoreHongKongIndex, StoreShanghaiIndex, addDays, addHours, addMinutes, bus, disconnectWebSocket, enableDataMasking, eventBus, exportFundContracts, exportToCSV, exportTrades, formatDate, formatDateTime, formatTime, getSocket, initSimulation, initSupabase, initWebSocket, isDataMaskingEnabled, isWeekend, isWorkday, maskAccount, maskAmount, maskBalance, maskContract, maskContractId, maskContracts, maskIndex, maskTrades, maskUserId, maskUsername, notify, randomBoolean, randomChoice, randomFloat, randomInt, randomShuffle, requestNotificationPermission, supabase, useAccountStore, useSimulationStore };

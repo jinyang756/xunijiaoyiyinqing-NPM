@@ -41,8 +41,14 @@ var init_supabase = __esm({
   "src/services/supabase.ts"() {
     "use strict";
     import_supabase_js = require("@supabase/supabase-js");
-    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL || "https://your-project.supabase.co";
-    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY || "your-anon-key";
+    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL;
+    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY;
+    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_URL) {
+      console.warn("\u26A0\uFE0F  Supabase URL \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_URL \u73AF\u5883\u53D8\u91CF");
+    }
+    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_ANON_KEY) {
+      console.warn("\u26A0\uFE0F  Supabase Key \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_ANON_KEY \u73AF\u5883\u53D8\u91CF");
+    }
     supabase = (0, import_supabase_js.createClient)(SUPABASE_URL, SUPABASE_KEY);
     initSupabase = async () => {
       await createTables();
@@ -174,6 +180,7 @@ __export(src_exports, {
   addMinutes: () => addMinutes,
   bus: () => bus,
   disconnectWebSocket: () => disconnectWebSocket,
+  enableDataMasking: () => enableDataMasking,
   eventBus: () => eventBus,
   exportFundContracts: () => exportFundContracts,
   exportToCSV: () => exportToCSV,
@@ -185,8 +192,19 @@ __export(src_exports, {
   initSimulation: () => initSimulation,
   initSupabase: () => initSupabase,
   initWebSocket: () => initWebSocket,
+  isDataMaskingEnabled: () => isDataMaskingEnabled,
   isWeekend: () => isWeekend,
   isWorkday: () => isWorkday,
+  maskAccount: () => maskAccount,
+  maskAmount: () => maskAmount,
+  maskBalance: () => maskBalance,
+  maskContract: () => maskContract,
+  maskContractId: () => maskContractId,
+  maskContracts: () => maskContracts,
+  maskIndex: () => maskIndex,
+  maskTrades: () => maskTrades,
+  maskUserId: () => maskUserId,
+  maskUsername: () => maskUsername,
   notify: () => notify,
   randomBoolean: () => randomBoolean,
   randomChoice: () => randomChoice,
@@ -1021,15 +1039,22 @@ var isWorkday = (date) => {
 };
 
 // src/utils/export.ts
-var XLSX = __toESM(require("xlsx"));
+var import_exceljs = __toESM(require("exceljs"));
 var import_file_saver = require("file-saver");
 init_accountStore();
-var exportToCSV = (data, filename) => {
-  const ws = XLSX.utils.json_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  const dataBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+var exportToCSV = async (data, filename) => {
+  const workbook = new import_exceljs.default.Workbook();
+  const worksheet = workbook.addWorksheet("Sheet1");
+  if (data.length > 0) {
+    const headers = Object.keys(data[0]);
+    worksheet.addRow(headers);
+    data.forEach((item) => {
+      const row = headers.map((header) => item[header]);
+      worksheet.addRow(row);
+    });
+  }
+  const buffer = await workbook.xlsx.writeBuffer();
+  const dataBlob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
   (0, import_file_saver.saveAs)(dataBlob, `${filename}_${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}.xlsx`);
 };
 var exportFundContracts = () => {
@@ -1045,6 +1070,111 @@ var exportTrades = () => {
 
 // src/index.ts
 init_websocket();
+
+// src/utils/dataMasking.ts
+var maskUserId = (userId) => {
+  if (!userId || userId.length <= 4) {
+    return "****";
+  }
+  return userId.substring(0, 2) + "****" + userId.substring(userId.length - 2);
+};
+var maskUsername = (username) => {
+  if (!username) {
+    return "***";
+  }
+  if (username.length === 1) {
+    return "*";
+  }
+  if (username.length === 2) {
+    return username.charAt(0) + "*";
+  }
+  return username.charAt(0) + "**" + username.charAt(username.length - 1);
+};
+var maskBalance = (balance, precision = 2) => {
+  if (balance < 100) {
+    return balance.toFixed(precision);
+  }
+  const balanceStr = Math.floor(balance).toString();
+  if (balanceStr.length <= 2) {
+    return balance.toFixed(precision);
+  }
+  return balanceStr.substring(0, 2) + "*".repeat(balanceStr.length - 2) + "." + "*".repeat(precision);
+};
+var maskAmount = (amount) => {
+  if (amount < 10) {
+    return amount.toFixed(2);
+  }
+  const amountStr = Math.floor(amount).toString();
+  if (amountStr.length <= 1) {
+    return amount.toFixed(2);
+  }
+  return amountStr.charAt(0) + "*".repeat(amountStr.length - 1) + ".**";
+};
+var maskContractId = (contractId) => {
+  if (!contractId || contractId.length <= 6) {
+    return "******";
+  }
+  return contractId.substring(0, 3) + "***" + contractId.substring(contractId.length - 3);
+};
+var maskTrades = (trades) => {
+  return trades.map((trade) => ({
+    ...trade,
+    trade_id: trade.trade_id ? maskContractId(trade.trade_id) : "***",
+    amount: trade.amount ? maskAmount(trade.amount) : "0.00",
+    price: trade.price ? maskAmount(trade.price) : "0.00",
+    profit: trade.profit ? maskAmount(Math.abs(trade.profit)) : "0.00"
+  }));
+};
+var maskAccount = (account) => {
+  if (!account)
+    return null;
+  return {
+    ...account,
+    user_id: maskUserId(account.user_id),
+    username: maskUsername(account.username),
+    balance: maskBalance(account.balance),
+    equity: maskBalance(account.equity),
+    trades: maskTrades(account.trades || [])
+  };
+};
+var maskContract = (contract) => {
+  if (!contract)
+    return null;
+  return {
+    ...contract,
+    contract_id: maskContractId(contract.contract_id),
+    cost: maskAmount(contract.cost),
+    profit: contract.profit ? maskAmount(Math.abs(contract.profit)) : "0.00",
+    strike_price: maskAmount(contract.strike_price)
+  };
+};
+var maskContracts = (contracts) => {
+  return contracts.map((contract) => maskContract(contract));
+};
+var maskIndex = (index) => {
+  if (!index)
+    return null;
+  return {
+    ...index,
+    current_price: index.current_price,
+    last_updated: index.last_updated,
+    northbound_flow: index.northbound_flow ? maskAmount(index.northbound_flow) : "0.00",
+    southbound_flow: index.southbound_flow ? maskAmount(index.southbound_flow) : "0.00"
+  };
+};
+var enableDataMasking = (enable = true) => {
+  if (typeof window !== "undefined") {
+    window.dataMaskingEnabled = enable;
+  }
+};
+var isDataMaskingEnabled = () => {
+  if (typeof window !== "undefined") {
+    return !!window.dataMaskingEnabled;
+  }
+  return false;
+};
+
+// src/index.ts
 init_supabase();
 var initSimulation = (opts) => {
   const scheduler = new Scheduler(opts?.startAt, { speed: opts?.speed || 60 });
@@ -1092,6 +1222,7 @@ var initSimulation = (opts) => {
   addMinutes,
   bus,
   disconnectWebSocket,
+  enableDataMasking,
   eventBus,
   exportFundContracts,
   exportToCSV,
@@ -1103,8 +1234,19 @@ var initSimulation = (opts) => {
   initSimulation,
   initSupabase,
   initWebSocket,
+  isDataMaskingEnabled,
   isWeekend,
   isWorkday,
+  maskAccount,
+  maskAmount,
+  maskBalance,
+  maskContract,
+  maskContractId,
+  maskContracts,
+  maskIndex,
+  maskTrades,
+  maskUserId,
+  maskUsername,
   notify,
   randomBoolean,
   randomChoice,

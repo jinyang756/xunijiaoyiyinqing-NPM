@@ -21,6 +21,7 @@ export * from './utils/random'
 export * from './utils/time'
 export * from './utils/export'
 export * from './utils/websocket'
+export * from './utils/dataMasking'
 
 // 服务
 export * from './services/supabase'

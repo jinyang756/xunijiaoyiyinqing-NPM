@@ -1,5 +1,8 @@
 # 聚财众发虚拟交易引擎 (jcf-sim-engine) v3.0
 
+> ⚠️ **重要安全通知**
+> ⚠️ 版本 3.0.2 修复了之前版本中存在的安全隐患，请立即升级！
+
 高仿真的全业务交易模拟平台，集成了A股新股申购、私募基金、大宗交易、机构席位和创新的基金合约交易。
 
 ## 🎯 核心特性
@@ -128,9 +131,9 @@ const handleExport = () => {
 
 ### Supabase集成
 ```typescript
-// 配置环境变量
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+// 配置环境变量（请替换为您的实际Supabase配置）
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 // 自动创建数据表并同步数据
 ```

@@ -142,8 +142,8 @@ function ExportButtons() {
 如需持久化到 Supabase，配置 `.env` 并在初始化时开启：
 
 ```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 ```tsx
 initSimulation({

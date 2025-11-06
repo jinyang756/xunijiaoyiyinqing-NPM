@@ -1,9 +1,11 @@
-import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useSimulationStore } from '../store/simulationStore'
 import { useAccountStore } from '../store/accountStore'
 
 export const exportToCSV = async <T extends Record<string, any>>(data: T[], filename: string) => {
+  // 动态导入ExcelJS以减少初始打包体积
+  const ExcelJS = await import('exceljs')
+  
   // 创建工作簿
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Sheet1')

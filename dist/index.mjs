@@ -996,10 +996,10 @@ var isWorkday = (date) => {
 };
 
 // src/utils/export.ts
-import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 init_accountStore();
 var exportToCSV = async (data, filename) => {
+  const ExcelJS = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Sheet1");
   if (data.length > 0) {

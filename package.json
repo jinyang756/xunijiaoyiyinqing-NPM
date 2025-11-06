@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm,cjs --out-dir dist",
+    "build": "tsup src/index.ts --dts --format esm,cjs --splitting --out-dir dist",
     "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir dist --watch",
     "test": "jest",
     "lint": "eslint src/**/*.ts || exit 0"

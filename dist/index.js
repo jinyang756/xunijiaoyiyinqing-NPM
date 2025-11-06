@@ -1,9 +1,6 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
@@ -20,14 +17,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/services/supabase.ts
@@ -36,21 +25,21 @@ __export(supabase_exports, {
   initSupabase: () => initSupabase,
   supabase: () => supabase
 });
-var import_supabase_js, SUPABASE_URL, SUPABASE_KEY, supabase, initSupabase, createTables;
+var _supabasejs = require('@supabase/supabase-js');
+var SUPABASE_URL, SUPABASE_KEY, supabase, initSupabase, createTables;
 var init_supabase = __esm({
   "src/services/supabase.ts"() {
     "use strict";
-    import_supabase_js = require("@supabase/supabase-js");
-    SUPABASE_URL = typeof process !== "undefined" && process.env?.VITE_SUPABASE_URL || "";
-    SUPABASE_KEY = typeof process !== "undefined" && process.env?.VITE_SUPABASE_ANON_KEY || "";
-    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_URL) {
+    SUPABASE_URL = typeof process !== "undefined" && _optionalChain([process, 'access', _ => _.env, 'optionalAccess', _2 => _2.VITE_SUPABASE_URL]) || "";
+    SUPABASE_KEY = typeof process !== "undefined" && _optionalChain([process, 'access', _3 => _3.env, 'optionalAccess', _4 => _4.VITE_SUPABASE_ANON_KEY]) || "";
+    if (typeof window !== "undefined" && !_optionalChain([process, 'access', _5 => _5.env, 'optionalAccess', _6 => _6.VITE_SUPABASE_URL])) {
       console.warn("\u26A0\uFE0F  Supabase URL \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_URL \u73AF\u5883\u53D8\u91CF");
     }
-    if (typeof window !== "undefined" && !process.env?.VITE_SUPABASE_ANON_KEY) {
+    if (typeof window !== "undefined" && !_optionalChain([process, 'access', _7 => _7.env, 'optionalAccess', _8 => _8.VITE_SUPABASE_ANON_KEY])) {
       console.warn("\u26A0\uFE0F  Supabase Key \u672A\u914D\u7F6E\uFF0C\u8BF7\u8BBE\u7F6E VITE_SUPABASE_ANON_KEY \u73AF\u5883\u53D8\u91CF");
     }
-    supabase = (0, import_supabase_js.createClient)(SUPABASE_URL, SUPABASE_KEY);
-    initSupabase = async () => {
+    supabase = exports.supabase = _supabasejs.createClient.call(void 0, SUPABASE_URL, SUPABASE_KEY);
+    initSupabase = exports.initSupabase = async () => {
       await createTables();
       console.log("\u2705 Supabase initialized");
     };
@@ -82,14 +71,14 @@ __export(accountStore_exports, {
   useActiveAccount: () => useActiveAccount,
   useUserBalance: () => useUserBalance
 });
-var import_zustand2, import_immer, useAccountStore, useActiveAccount, useAccounts, useUserBalance;
+var _zustand = require('zustand');
+var _immer = require('zustand/middleware/immer');
+var useAccountStore, useActiveAccount, useAccounts, useUserBalance;
 var init_accountStore = __esm({
   "src/store/accountStore.ts"() {
     "use strict";
-    import_zustand2 = require("zustand");
-    import_immer = require("zustand/middleware/immer");
-    useAccountStore = (0, import_zustand2.create)()(
-      (0, import_immer.immer)((set, get) => ({
+    useAccountStore = exports.useAccountStore = _zustand.create.call(void 0, )(
+      _immer.immer.call(void 0, (set, get) => ({
         accounts: [],
         activeAccount: null,
         initDemoAccount: () => {
@@ -134,9 +123,9 @@ var init_accountStore = __esm({
         }
       }))
     );
-    useActiveAccount = () => useAccountStore((state) => state.activeAccount);
-    useAccounts = () => useAccountStore((state) => state.accounts);
-    useUserBalance = (user_id) => useAccountStore((state) => state.getUserBalance(user_id));
+    useActiveAccount = exports.useActiveAccount = () => useAccountStore((state) => state.activeAccount);
+    useAccounts = exports.useAccounts = () => useAccountStore((state) => state.accounts);
+    useUserBalance = exports.useUserBalance = (user_id) => useAccountStore((state) => state.getUserBalance(user_id));
     if (typeof window !== "undefined") {
       window.initDemoAccount = () => {
         const { initDemoAccount } = useAccountStore.getState();
@@ -158,14 +147,14 @@ var init_websocket = __esm({
   "src/utils/websocket.ts"() {
     "use strict";
     socket = null;
-    initWebSocket = () => {
+    initWebSocket = exports.initWebSocket = () => {
       console.log("\u{1F50C} WebSocket initialized");
       window.addEventListener("simulation-notification", (event) => {
         console.log("\u{1F4E1} WebSocket send:", event.detail);
       });
     };
-    getSocket = () => socket;
-    disconnectWebSocket = () => {
+    getSocket = exports.getSocket = () => socket;
+    disconnectWebSocket = exports.disconnectWebSocket = () => {
       if (socket) {
         socket.disconnect();
         socket = null;
@@ -174,76 +163,10 @@ var init_websocket = __esm({
   }
 });
 
-// src/index.ts
-var src_exports = {};
-__export(src_exports, {
-  BlockEngine: () => BlockEngine,
-  ETFCreationEngine: () => ETFCreationEngine,
-  FundContractEngine: () => FundContractEngine,
-  FundEngine: () => FundEngine,
-  FuturesArbEngine: () => FuturesArbEngine,
-  IpoEngine: () => IpoEngine,
-  OptionsEngine: () => OptionsEngine,
-  Scheduler: () => Scheduler,
-  SeatEngine: () => SeatEngine,
-  addDays: () => addDays,
-  addHours: () => addHours,
-  addMinutes: () => addMinutes,
-  bus: () => bus,
-  disconnectWebSocket: () => disconnectWebSocket,
-  enableDataMasking: () => enableDataMasking,
-  eventBus: () => eventBus,
-  exportFundContracts: () => exportFundContracts,
-  exportToCSV: () => exportToCSV,
-  exportTrades: () => exportTrades,
-  formatDate: () => formatDate,
-  formatDateTime: () => formatDateTime,
-  formatTime: () => formatTime,
-  getSocket: () => getSocket,
-  initSimulation: () => initSimulation,
-  initSupabase: () => initSupabase,
-  initWebSocket: () => initWebSocket,
-  isDataMaskingEnabled: () => isDataMaskingEnabled,
-  isWeekend: () => isWeekend,
-  isWorkday: () => isWorkday,
-  maskAccount: () => maskAccount,
-  maskAmount: () => maskAmount,
-  maskBalance: () => maskBalance,
-  maskContract: () => maskContract,
-  maskContractId: () => maskContractId,
-  maskContracts: () => maskContracts,
-  maskIndex: () => maskIndex,
-  maskTrades: () => maskTrades,
-  maskUserId: () => maskUserId,
-  maskUsername: () => maskUsername,
-  notify: () => notify,
-  randomBoolean: () => randomBoolean,
-  randomChoice: () => randomChoice,
-  randomFloat: () => randomFloat,
-  randomInt: () => randomInt,
-  randomShuffle: () => randomShuffle,
-  requestNotificationPermission: () => requestNotificationPermission,
-  supabase: () => supabase,
-  useAccountStore: () => useAccountStore,
-  useAccounts: () => useAccounts,
-  useActiveAccount: () => useActiveAccount,
-  useContractById: () => useContractById,
-  useContracts: () => useContracts,
-  useFundNavByCode: () => useFundNavByCode,
-  useFundNavs: () => useFundNavs,
-  useFundVolatilities: () => useFundVolatilities,
-  useHongkongIndex: () => useHongkongIndex,
-  useIpoWinRate: () => useIpoWinRate,
-  useShanghaiIndex: () => useShanghaiIndex,
-  useSimulationStore: () => useSimulationStore,
-  useUserBalance: () => useUserBalance
-});
-module.exports = __toCommonJS(src_exports);
-
 // src/core/Scheduler.ts
-var import_date_fns = require("date-fns");
-var import_mitt = __toESM(require("mitt"));
-var bus = (0, import_mitt.default)();
+var _datefns = require('date-fns');
+var _mitt = require('mitt'); var _mitt2 = _interopRequireDefault(_mitt);
+var bus = _mitt2.default.call(void 0, );
 var Scheduler = class {
   constructor(startAt = /* @__PURE__ */ new Date(), opts) {
     this.now = startAt;
@@ -261,7 +184,7 @@ var Scheduler = class {
     bus.emit("scheduler_stop", this.now);
   }
   tick() {
-    this.now = (0, import_date_fns.add)(this.now, { minutes: this.opts.virtualStepMin });
+    this.now = _datefns.add.call(void 0, this.now, { minutes: this.opts.virtualStepMin });
     bus.emit("tick", this.now);
     bus.emit("hourly", this.now.getHours());
     bus.emit("daily", this.now);
@@ -269,11 +192,11 @@ var Scheduler = class {
 };
 
 // src/core/EventBus.ts
-var import_mitt2 = __toESM(require("mitt"));
-var eventBus = (0, import_mitt2.default)();
+
+var eventBus = _mitt2.default.call(void 0, );
 
 // src/engines/ipo.ts
-var import_nanoid = require("nanoid");
+var _nanoid = require('nanoid');
 
 // src/services/notification.ts
 var notify = (title, message, type = "info") => {
@@ -317,7 +240,7 @@ var IpoEngine = class {
   generateHistoricalIpos() {
     const historicalIpos = [
       {
-        stock_id: (0, import_nanoid.nanoid)(),
+        stock_id: _nanoid.nanoid.call(void 0, ),
         stock_code: "600100",
         stock_name: "\u540C\u65B9\u80A1\u4EFD",
         issue_price: 6.28,
@@ -329,7 +252,7 @@ var IpoEngine = class {
         listing_date: "2025-08-15"
       },
       {
-        stock_id: (0, import_nanoid.nanoid)(),
+        stock_id: _nanoid.nanoid.call(void 0, ),
         stock_code: "600111",
         stock_name: "\u5317\u65B9\u7A00\u571F",
         issue_price: 12.65,
@@ -365,7 +288,7 @@ var IpoEngine = class {
 };
 
 // src/engines/seat.ts
-var import_nanoid2 = require("nanoid");
+
 var SeatEngine = class {
   constructor() {
     this.trades = [];
@@ -376,7 +299,7 @@ var SeatEngine = class {
   }
   executeTrade(userId, stockCode, stockName, price, quantity, direction) {
     const trade = {
-      trade_id: (0, import_nanoid2.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       user_id: userId,
       stock_code: stockCode,
       stock_name: stockName,
@@ -398,7 +321,7 @@ var SeatEngine = class {
 };
 
 // src/engines/block.ts
-var import_nanoid3 = require("nanoid");
+
 var BlockEngine = class {
   constructor() {
     this.trades = [];
@@ -411,7 +334,7 @@ var BlockEngine = class {
   generateHistoricalBlockTrades() {
     const historicalTrades = [
       {
-        trade_id: (0, import_nanoid3.nanoid)(),
+        trade_id: _nanoid.nanoid.call(void 0, ),
         stock_code: "600036",
         stock_name: "\u62DB\u5546\u94F6\u884C",
         price: 35.2,
@@ -427,7 +350,7 @@ var BlockEngine = class {
   }
   executeBlockTrade(stockCode, stockName, price, quantity, buyer, seller, discountRate) {
     const trade = {
-      trade_id: (0, import_nanoid3.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       stock_code: stockCode,
       stock_name: stockName,
       price,
@@ -448,7 +371,7 @@ var BlockEngine = class {
 };
 
 // src/engines/fund.ts
-var import_nanoid4 = require("nanoid");
+
 var FundEngine = class {
   constructor() {
     this.products = [
@@ -522,7 +445,7 @@ var FundEngine = class {
     const shares = amount / fund.nav;
     const fee = amount * 0.01;
     const trade = {
-      trade_id: (0, import_nanoid4.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       user_id: userId,
       fund_code: fundCode,
       fund_name: fund.fund_name,
@@ -547,7 +470,7 @@ var FundEngine = class {
     const amount = shares * fund.nav;
     const fee = amount * 5e-3;
     const trade = {
-      trade_id: (0, import_nanoid4.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       user_id: userId,
       fund_code: fundCode,
       fund_name: fund.fund_name,
@@ -572,12 +495,12 @@ var FundEngine = class {
 };
 
 // src/engines/fundContract.ts
-var import_date_fns2 = require("date-fns");
-var import_nanoid5 = require("nanoid");
+
+
 
 // src/store/simulationStore.ts
-var import_zustand = require("zustand");
-var useSimulationStore = (0, import_zustand.create)()((set, get) => ({
+
+var useSimulationStore = _zustand.create.call(void 0, )((set, get) => ({
   // 初始状态
   contracts: [],
   shanghaiIndex: {
@@ -707,7 +630,7 @@ var FundContractEngine = class {
     const start = /* @__PURE__ */ new Date("2025-08-01T09:30:00");
     const end = /* @__PURE__ */ new Date("2025-11-06T08:43:00");
     let current = start;
-    while ((0, import_date_fns2.isBefore)(current, end)) {
+    while (_datefns.isBefore.call(void 0, current, end)) {
       if (current.getDay() % 6 !== 0) {
         if (Math.random() < 0.2) {
           this.generateContract(current, "shanghai");
@@ -716,19 +639,19 @@ var FundContractEngine = class {
           this.generateContract(current, "hongkong");
         }
       }
-      current = (0, import_date_fns2.add)(current, { minutes: 5 });
+      current = _datefns.add.call(void 0, current, { minutes: 5 });
     }
   }
   generateContract(issueTime, type) {
     const now = issueTime;
     const durations = [5, 10, 30];
     const duration = durations[Math.floor(Math.random() * durations.length)];
-    const expiration = (0, import_date_fns2.add)(now, { minutes: duration });
+    const expiration = _datefns.add.call(void 0, now, { minutes: duration });
     const currentPrice = type === "shanghai" ? this.shanghaiIndex.current_price : this.hongkongIndex.current_price;
     const direction = Math.random() > 0.5 ? "call" : "put";
     const cost = Math.floor(1e3 + Math.random() * 9e3);
     const contract = {
-      contract_id: (0, import_nanoid5.nanoid)(),
+      contract_id: _nanoid.nanoid.call(void 0, ),
       type,
       strike_price: currentPrice,
       issue_time: now.toISOString(),
@@ -762,7 +685,7 @@ var FundContractEngine = class {
   }
   checkExpiringContracts(now) {
     this.contracts.forEach((contract) => {
-      if (contract.status === "open" && (0, import_date_fns2.isBefore)((0, import_date_fns2.parseISO)(contract.expiration_time), now)) {
+      if (contract.status === "open" && _datefns.isBefore.call(void 0, _datefns.parseISO.call(void 0, contract.expiration_time), now)) {
         this.expireContract(contract);
       }
     });
@@ -815,7 +738,7 @@ var FundContractEngine = class {
 };
 
 // src/engines/futuresArb.ts
-var import_nanoid6 = require("nanoid");
+
 var FuturesArbEngine = class {
   constructor() {
     this.contracts = [];
@@ -837,7 +760,7 @@ var FuturesArbEngine = class {
   }
   openPosition(symbol, price, quantity, leverage) {
     const contract = {
-      contract_id: (0, import_nanoid6.nanoid)(),
+      contract_id: _nanoid.nanoid.call(void 0, ),
       symbol,
       expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3).toISOString(),
       // 30天后到期
@@ -867,7 +790,7 @@ var FuturesArbEngine = class {
 };
 
 // src/engines/etfCreation.ts
-var import_nanoid7 = require("nanoid");
+
 var ETFCreationEngine = class {
   constructor() {
     this.products = [
@@ -907,7 +830,7 @@ var ETFCreationEngine = class {
     }
     const amount = quantity * etf.nav;
     const trade = {
-      trade_id: (0, import_nanoid7.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       user_id: userId,
       etf_code: etfCode,
       etf_name: etf.etf_name,
@@ -930,7 +853,7 @@ var ETFCreationEngine = class {
     }
     const amount = quantity * etf.nav;
     const trade = {
-      trade_id: (0, import_nanoid7.nanoid)(),
+      trade_id: _nanoid.nanoid.call(void 0, ),
       user_id: userId,
       etf_code: etfCode,
       etf_name: etf.etf_name,
@@ -954,7 +877,7 @@ var ETFCreationEngine = class {
 };
 
 // src/engines/options.ts
-var import_nanoid8 = require("nanoid");
+
 var OptionsEngine = class {
   constructor() {
     this.contracts = [];
@@ -976,7 +899,7 @@ var OptionsEngine = class {
   }
   createOption(underlyingSymbol, strikePrice, expiryDate, type, premium, quantity) {
     const contract = {
-      option_id: (0, import_nanoid8.nanoid)(),
+      option_id: _nanoid.nanoid.call(void 0, ),
       underlying_symbol: underlyingSymbol,
       strike_price: strikePrice,
       expiry_date: expiryDate,
@@ -1073,11 +996,11 @@ var isWorkday = (date) => {
 };
 
 // src/utils/export.ts
-var import_exceljs = __toESM(require("exceljs"));
-var import_file_saver = require("file-saver");
+var _filesaver = require('file-saver');
 init_accountStore();
 var exportToCSV = async (data, filename) => {
-  const workbook = new import_exceljs.default.Workbook();
+  const ExcelJS = await Promise.resolve().then(() => _interopRequireWildcard(require("exceljs")));
+  const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Sheet1");
   if (data.length > 0) {
     const headers = Object.keys(data[0]);
@@ -1089,7 +1012,7 @@ var exportToCSV = async (data, filename) => {
   }
   const buffer = await workbook.xlsx.writeBuffer();
   const dataBlob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-  (0, import_file_saver.saveAs)(dataBlob, `${filename}_${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}.xlsx`);
+  _filesaver.saveAs.call(void 0, dataBlob, `${filename}_${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}.xlsx`);
 };
 var exportFundContracts = () => {
   const { contracts } = useSimulationStore.getState();
@@ -1211,7 +1134,7 @@ var isDataMaskingEnabled = () => {
 // src/index.ts
 init_supabase();
 var initSimulation = (opts) => {
-  const scheduler = new Scheduler(opts?.startAt, { speed: opts?.speed || 60 });
+  const scheduler = new Scheduler(_optionalChain([opts, 'optionalAccess', _9 => _9.startAt]), { speed: _optionalChain([opts, 'optionalAccess', _10 => _10.speed]) || 60 });
   const engines = [
     new IpoEngine(),
     new SeatEngine(),
@@ -1219,87 +1142,86 @@ var initSimulation = (opts) => {
     new FundEngine(),
     new FundContractEngine()
   ];
-  if (opts?.enableFutures !== false)
+  if (_optionalChain([opts, 'optionalAccess', _11 => _11.enableFutures]) !== false)
     engines.push(new FuturesArbEngine());
-  if (opts?.enableETF !== false)
+  if (_optionalChain([opts, 'optionalAccess', _12 => _12.enableETF]) !== false)
     engines.push(new ETFCreationEngine());
-  if (opts?.enableOptions !== false)
+  if (_optionalChain([opts, 'optionalAccess', _13 => _13.enableOptions]) !== false)
     engines.push(new OptionsEngine());
-  if (opts?.enableSupabase) {
+  if (_optionalChain([opts, 'optionalAccess', _14 => _14.enableSupabase])) {
     const { initSupabase: initSupabase2 } = (init_supabase(), __toCommonJS(supabase_exports));
     initSupabase2();
   }
-  if (opts?.enableWebSocket) {
+  if (_optionalChain([opts, 'optionalAccess', _15 => _15.enableWebSocket])) {
     const { initWebSocket: initWebSocket2 } = (init_websocket(), __toCommonJS(websocket_exports));
     initWebSocket2();
   }
-  if (opts?.demoAccount) {
+  if (_optionalChain([opts, 'optionalAccess', _16 => _16.demoAccount])) {
     const { initDemoAccount } = (init_accountStore(), __toCommonJS(accountStore_exports));
     initDemoAccount();
   }
   scheduler.start();
   return scheduler;
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  BlockEngine,
-  ETFCreationEngine,
-  FundContractEngine,
-  FundEngine,
-  FuturesArbEngine,
-  IpoEngine,
-  OptionsEngine,
-  Scheduler,
-  SeatEngine,
-  addDays,
-  addHours,
-  addMinutes,
-  bus,
-  disconnectWebSocket,
-  enableDataMasking,
-  eventBus,
-  exportFundContracts,
-  exportToCSV,
-  exportTrades,
-  formatDate,
-  formatDateTime,
-  formatTime,
-  getSocket,
-  initSimulation,
-  initSupabase,
-  initWebSocket,
-  isDataMaskingEnabled,
-  isWeekend,
-  isWorkday,
-  maskAccount,
-  maskAmount,
-  maskBalance,
-  maskContract,
-  maskContractId,
-  maskContracts,
-  maskIndex,
-  maskTrades,
-  maskUserId,
-  maskUsername,
-  notify,
-  randomBoolean,
-  randomChoice,
-  randomFloat,
-  randomInt,
-  randomShuffle,
-  requestNotificationPermission,
-  supabase,
-  useAccountStore,
-  useAccounts,
-  useActiveAccount,
-  useContractById,
-  useContracts,
-  useFundNavByCode,
-  useFundNavs,
-  useFundVolatilities,
-  useHongkongIndex,
-  useIpoWinRate,
-  useShanghaiIndex,
-  useSimulationStore,
-  useUserBalance
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.BlockEngine = BlockEngine; exports.ETFCreationEngine = ETFCreationEngine; exports.FundContractEngine = FundContractEngine; exports.FundEngine = FundEngine; exports.FuturesArbEngine = FuturesArbEngine; exports.IpoEngine = IpoEngine; exports.OptionsEngine = OptionsEngine; exports.Scheduler = Scheduler; exports.SeatEngine = SeatEngine; exports.addDays = addDays; exports.addHours = addHours; exports.addMinutes = addMinutes; exports.bus = bus; exports.disconnectWebSocket = disconnectWebSocket; exports.enableDataMasking = enableDataMasking; exports.eventBus = eventBus; exports.exportFundContracts = exportFundContracts; exports.exportToCSV = exportToCSV; exports.exportTrades = exportTrades; exports.formatDate = formatDate; exports.formatDateTime = formatDateTime; exports.formatTime = formatTime; exports.getSocket = getSocket; exports.initSimulation = initSimulation; exports.initSupabase = initSupabase; exports.initWebSocket = initWebSocket; exports.isDataMaskingEnabled = isDataMaskingEnabled; exports.isWeekend = isWeekend; exports.isWorkday = isWorkday; exports.maskAccount = maskAccount; exports.maskAmount = maskAmount; exports.maskBalance = maskBalance; exports.maskContract = maskContract; exports.maskContractId = maskContractId; exports.maskContracts = maskContracts; exports.maskIndex = maskIndex; exports.maskTrades = maskTrades; exports.maskUserId = maskUserId; exports.maskUsername = maskUsername; exports.notify = notify; exports.randomBoolean = randomBoolean; exports.randomChoice = randomChoice; exports.randomFloat = randomFloat; exports.randomInt = randomInt; exports.randomShuffle = randomShuffle; exports.requestNotificationPermission = requestNotificationPermission; exports.supabase = supabase; exports.useAccountStore = useAccountStore; exports.useAccounts = useAccounts; exports.useActiveAccount = useActiveAccount; exports.useContractById = useContractById; exports.useContracts = useContracts; exports.useFundNavByCode = useFundNavByCode; exports.useFundNavs = useFundNavs; exports.useFundVolatilities = useFundVolatilities; exports.useHongkongIndex = useHongkongIndex; exports.useIpoWinRate = useIpoWinRate; exports.useShanghaiIndex = useShanghaiIndex; exports.useSimulationStore = useSimulationStore; exports.useUserBalance = useUserBalance;
